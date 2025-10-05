@@ -1,9 +1,11 @@
 import { Box, Container, Button } from "@mui/material";
+import { Link } from "react-router-dom";
+
 const Navigater = () => {
   return (
     <Container>
       <Box>
-        <Button variant="outlined">Home</Button>
+        <Button component={Link} to="/" variant="outlined">Home</Button>
       </Box>
     </Container>
   );

@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { describe, it, expect } from 'vitest';
-import Navigater from './Navigater';
+import Navigater from '../components/Navigater';
 
 describe('Navigater', () => {
   it('renders Home link', () => {

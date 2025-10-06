@@ -1,4 +1,4 @@
-import {useState,Fragment} from 'react';
+import { useState, Fragment } from 'react';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Divider from '@mui/material/Divider';
@@ -12,17 +12,21 @@ import IconButton from '@mui/material/IconButton';
 const mockData = [
   {
     id: 1,
-    summary: 'testData'
+    summary: 'testData',
+    startDate: '2025-10-25',
+    endDate: '2025-10-26',
   },
   {
     id: 2,
-    summary: 'testData2'
+    summary: 'testData2',
+    startDate: '2025-10-25',
+    endDate: '2025-10-26',
   }
 ]
 export default function Todo() {
   const [todoData,] = useState(mockData);
   return (
-    <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper',textAlign:'center' }}>
+    <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper', textAlign: 'center' }}>
       {todoData.map((e) => {
         return (
           <Fragment key={e.id}>
@@ -36,7 +40,9 @@ export default function Todo() {
                       variant="body2"
                       sx={{ color: 'text.primary', display: 'inline' }}
                     >
-                      {e.summary}
+                      {e.startDate}
+                      {' - '}
+                      {e.endDate}
                     </Typography>
                   </Fragment>
                 }

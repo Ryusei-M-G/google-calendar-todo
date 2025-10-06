@@ -24,9 +24,13 @@ const mockData = [
   }
 ]
 export default function Todo() {
-  const [todoData,] = useState(mockData);
+  const [todoData,setTodoData] = useState(mockData);
+
+  const deleteHandle = (id: number) => {
+    setTodoData(todoData.filter((item) => item.id !== id));
+  }
   return (
-    <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper', textAlign: 'center' }}>
+    <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper', margin: '0 auto' }}>
       {todoData.map((e) => {
         return (
           <Fragment key={e.id}>
@@ -47,7 +51,7 @@ export default function Todo() {
                   </Fragment>
                 }
               />
-              <IconButton aria-label="delete">
+              <IconButton aria-label="delete" onClick={() => deleteHandle(e.id)}>
                 <DeleteIcon />
               </IconButton>
             </ListItem>

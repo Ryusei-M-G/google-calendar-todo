@@ -1,4 +1,4 @@
-import * as React from 'react';
+import {useState,Fragment} from 'react';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Divider from '@mui/material/Divider';
@@ -6,6 +6,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
+
 
 
 const mockData = [
@@ -19,16 +20,17 @@ const mockData = [
   }
 ]
 export default function Todo() {
+  const [todoData,] = useState(mockData);
   return (
-    <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-      {mockData.map((e) => {
+    <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper',textAlign:'center' }}>
+      {todoData.map((e) => {
         return (
-          <React.Fragment key={e.id}>
+          <Fragment key={e.id}>
             <ListItem alignItems="flex-start">
               <ListItemText
                 primary={e.summary}
                 secondary={
-                  <React.Fragment>
+                  <Fragment>
                     <Typography
                       component="span"
                       variant="body2"
@@ -36,7 +38,7 @@ export default function Todo() {
                     >
                       {e.summary}
                     </Typography>
-                  </React.Fragment>
+                  </Fragment>
                 }
               />
               <IconButton aria-label="delete">
@@ -44,7 +46,7 @@ export default function Todo() {
               </IconButton>
             </ListItem>
             <Divider variant="fullWidth" component="li" />
-          </React.Fragment>
+          </Fragment>
         )
       })}
     </List>

@@ -25,4 +25,26 @@ describe('Navigater', () => {
     const homeLink = screen.getByRole('link', { name: /home/i });
     expect(homeLink).toHaveAttribute('href', '/');
   });
+
+  it('renders Todo link', () => {
+    render(
+      <BrowserRouter>
+        <Navigater />
+      </BrowserRouter>
+    );
+
+    const todoLink = screen.getByRole('link', { name: /todo/i });
+    expect(todoLink).toBeInTheDocument();
+  });
+
+  it('Todo link has correct href', () => {
+    render(
+      <BrowserRouter>
+        <Navigater />
+      </BrowserRouter>
+    );
+
+    const todoLink = screen.getByRole('link', { name: /todo/i });
+    expect(todoLink).toHaveAttribute('href', '/todo');
+  });
 });

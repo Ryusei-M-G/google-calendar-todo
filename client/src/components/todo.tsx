@@ -7,6 +7,8 @@ import Typography from '@mui/material/Typography';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 
+import InputForm from './form';
+
 
 
 const mockData = [
@@ -30,7 +32,9 @@ export default function Todo() {
     setTodoData(todoData.filter((item) => item.id !== id));
   }
   return (
-    <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper', margin: '0 auto' }}>
+    <div style={{textAlign:'center'}}>
+    <InputForm />
+    <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper',margin: '0 auto'  }}>
       {todoData.map((e) => {
         return (
           <Fragment key={e.id}>
@@ -60,5 +64,6 @@ export default function Todo() {
         )
       })}
     </List>
+    </div>
   );
 }

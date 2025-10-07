@@ -5,6 +5,7 @@ import Divider from '@mui/material/Divider';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
 
 import InputForm from './form';
@@ -25,11 +26,23 @@ const mockData = [
     endDate: '2025-10-26 17:00',
   }
 ]
+interface TodoItem {
+  id: number;
+  summary: string;
+  startDate: string;
+  endDate: string;
+}
+
 export default function Todo() {
   const [todoData,setTodoData] = useState(mockData);
+  const [editingTodo, setEditingTodo] = useState<TodoItem | null>(null);
 
   const deleteHandle = (id: number) => {
     setTodoData(todoData.filter((item) => item.id !== id));
+  }
+
+  const editHandle = (todo: TodoItem) => {
+    setEditingTodo(todo);
   }
 
   const addTodo = (summary: string, startDate: string, endDate: string) => {
@@ -43,9 +56,21 @@ export default function Todo() {
     setTodoData([...todoData, newTodo]);
   }
 
+  const updateTodo = (id: number, summary: string, startDate: string, endDate: string) => {
+    setTodoData(todoData.map(item =>
+      item.id === id ? { ...item, summary, startDate, endDate } : item
+    ));
+    setEditingTodo(null);
+  }
+
   return (
     <div style={{textAlign:'center'}}>
-    <InputForm onAddTodo={addTodo} />
+    <InputForm
+      onAddTodo={addTodo}
+      onUpdateTodo={updateTodo}
+      editingTodo={editingTodo}
+      onCancelEdit={() => setEditingTodo(null)}
+    />
     <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper',margin: '0 auto'  }}>
       {todoData.map((e) => {
         return (
@@ -67,6 +92,9 @@ export default function Todo() {
                   </Fragment>
                 }
               />
+              <IconButton aria-label="edit" onClick={() => editHandle(e)}>
+                <EditIcon />
+              </IconButton>
               <IconButton aria-label="delete" onClick={() => deleteHandle(e.id)}>
                 <DeleteIcon />
               </IconButton>

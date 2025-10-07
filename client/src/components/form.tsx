@@ -4,30 +4,68 @@ import Button from '@mui/material/Button';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import dayjs, { Dayjs } from 'dayjs';
+
+interface TodoItem {
+  id: number;
+  summary: string;
+  startDate: string;
+  endDate: string;
+}
 
 interface InputFormProps {
   onAddTodo: (summary: string, startDate: string, endDate: string) => void;
+  onUpdateTodo: (id: number, summary: string, startDate: string, endDate: string) => void;
+  editingTodo: TodoItem | null;
+  onCancelEdit: () => void;
 }
 
-const InputForm = ({ onAddTodo }: InputFormProps) => {
+const InputForm = ({ onAddTodo, onUpdateTodo, editingTodo, onCancelEdit }: InputFormProps) => {
   const [summary, setSummary] = useState('');
   const [startDate, setStartDate] = useState<Dayjs | null>(dayjs());
   const [endDate, setEndDate] = useState<Dayjs | null>(dayjs());
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (summary && startDate && endDate) {
-      onAddTodo(
-        summary,
-        startDate.format('YYYY-MM-DD HH:mm'),
-        endDate.format('YYYY-MM-DD HH:mm')
-      );
+  useEffect(() => {
+    if (editingTodo) {
+      setSummary(editingTodo.summary);
+      setStartDate(dayjs(editingTodo.startDate, 'YYYY-MM-DD HH:mm'));
+      setEndDate(dayjs(editingTodo.endDate, 'YYYY-MM-DD HH:mm'));
+    } else {
       setSummary('');
       setStartDate(dayjs());
       setEndDate(dayjs());
     }
+  }, [editingTodo]);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (summary && startDate && endDate) {
+      if (editingTodo) {
+        onUpdateTodo(
+          editingTodo.id,
+          summary,
+          startDate.format('YYYY-MM-DD HH:mm'),
+          endDate.format('YYYY-MM-DD HH:mm')
+        );
+      } else {
+        onAddTodo(
+          summary,
+          startDate.format('YYYY-MM-DD HH:mm'),
+          endDate.format('YYYY-MM-DD HH:mm')
+        );
+      }
+      setSummary('');
+      setStartDate(dayjs());
+      setEndDate(dayjs());
+    }
+  };
+
+  const handleCancel = () => {
+    setSummary('');
+    setStartDate(dayjs());
+    setEndDate(dayjs());
+    onCancelEdit();
   };
 
   return (
@@ -66,9 +104,16 @@ const InputForm = ({ onAddTodo }: InputFormProps) => {
           value={endDate}
           onChange={(newValue) => setEndDate(newValue)}
         />
-        <Button variant="contained" type="submit">
-          追加
-        </Button>
+        <Box sx={{ display: 'flex', gap: 2 }}>
+          <Button variant="contained" type="submit" sx={{ flex: 1 }}>
+            {editingTodo ? '更新' : '追加'}
+          </Button>
+          {editingTodo && (
+            <Button variant="outlined" onClick={handleCancel} sx={{ flex: 1 }}>
+              キャンセル
+            </Button>
+          )}
+        </Box>
       </Box>
     </LocalizationProvider>
   );

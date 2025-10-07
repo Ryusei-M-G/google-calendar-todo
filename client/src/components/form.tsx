@@ -21,8 +21,8 @@ const InputForm = ({ onAddTodo }: InputFormProps) => {
     if (summary && startDate && endDate) {
       onAddTodo(
         summary,
-        startDate.format('YYYY-MM-DD'),
-        endDate.format('YYYY-MM-DD')
+        startDate.format('YYYY-MM-DD HH:mm'),
+        endDate.format('YYYY-MM-DD HH:mm')
       );
       setSummary('');
       setStartDate(dayjs());

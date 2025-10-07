@@ -31,9 +31,21 @@ export default function Todo() {
   const deleteHandle = (id: number) => {
     setTodoData(todoData.filter((item) => item.id !== id));
   }
+
+  const addTodo = (summary: string, startDate: string, endDate: string) => {
+    const newId = todoData.length > 0 ? Math.max(...todoData.map(item => item.id)) + 1 : 1;
+    const newTodo = {
+      id: newId,
+      summary,
+      startDate,
+      endDate,
+    };
+    setTodoData([...todoData, newTodo]);
+  }
+
   return (
     <div style={{textAlign:'center'}}>
-    <InputForm />
+    <InputForm onAddTodo={addTodo} />
     <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper',margin: '0 auto'  }}>
       {todoData.map((e) => {
         return (

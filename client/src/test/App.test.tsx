@@ -14,14 +14,17 @@ describe('App', () => {
   });
 
   it('redirects to auth endpoint when login button is clicked', () => {
-    delete (window as any).location;
-    window.location = { href: '' } as any;
+    const mockLocation = { href: '' };
+    Object.defineProperty(window, 'location', {
+      value: mockLocation,
+      writable: true,
+    });
 
     render(<App />);
 
     const loginButton = screen.getByRole('button', { name: 'googleでログイン' });
     fireEvent.click(loginButton);
 
-    expect(window.location.href).toBe('http://localhost:3000/auth');
+    expect(mockLocation.href).toBe('http://localhost:3000/auth');
   });
 });

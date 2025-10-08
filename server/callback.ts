@@ -2,13 +2,20 @@ import { Request, Response } from 'express';
 import { Pool } from 'pg';
 import { google } from 'googleapis';
 
-const pool = new Pool({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DB_NAME,
-  password: process.env.DB_PASSWORD,
-  port: Number(process.env.DB_PORT),
-});
+let pool: Pool;
+
+const getPool = () => {
+  if (!pool) {
+    pool = new Pool({
+      user: process.env.DB_USER,
+      host: process.env.DB_HOST,
+      database: process.env.DB_NAME,
+      password: process.env.DB_PASSWORD,
+      port: Number(process.env.DB_PORT),
+    });
+  }
+  return pool;
+};
 
 const callback = async (req: Request, res: Response): Promise<void> => {
   const code = req.query.code as string;
@@ -59,7 +66,7 @@ const callback = async (req: Request, res: Response): Promise<void> => {
       tokens.refresh_token,
     ];
 
-    const result = await pool.query(query, values);
+    const result = await getPool().query(query, values);
     const user = result.rows[0];
 
     res.json({

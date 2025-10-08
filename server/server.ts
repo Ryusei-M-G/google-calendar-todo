@@ -9,7 +9,7 @@ const app = express();
 const port = process.env.PORT;
 
 app.get('/auth',google_oauth);
-app.get('/callback',callback);
+app.get('/auth/google/callback',callback);
 app.listen(port, ()=>{
   console.log(`server is running port:${port}`)
 })

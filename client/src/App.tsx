@@ -3,8 +3,7 @@ import { Button, Typography, Container, Box } from '@mui/material'
 function App() {
 
   const loginHandle = () => {
-    console.log('ログイン（モック）');
-    // window.location.href = 'http://localhost:3000/auth';
+    window.location.href = 'http://localhost:3000/auth';
   }
   return (
     <Container style={{ textAlign: 'center' }} >

@@ -1,13 +1,15 @@
 import express from 'express'
-
+import { configDotenv } from 'dotenv';
 import google_oauth from './google_oauth';
 import callback from './callback';
-const app = express();
 
-const port = 3000;
+configDotenv();
+
+const app = express();
+const port = process.env.PORT;
 
 app.get('/auth',google_oauth);
 app.get('/callback',callback);
 app.listen(port, ()=>{
-  console.log('server is running')
+  console.log(`server is running port:${port}`)
 })

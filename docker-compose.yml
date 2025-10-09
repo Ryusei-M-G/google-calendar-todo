@@ -46,11 +46,11 @@ services:
 # frontend
   frontend:
     build:
-      context: ./frontend
+      context: ./client
       dockerfile: Dockerfile
       args:
         VITE_API_URL: http://localhost:3000
-    container_name: my-project-frontend
+    container_name: google-calendar-todo-frontend
     restart: unless-stopped
     ports:
       - "80:80"

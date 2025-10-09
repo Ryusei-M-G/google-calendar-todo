@@ -1,7 +1,10 @@
 {
   "permissions": {
     "allow": [
-      "Bash(docker-compose:*)"
+      "Bash(docker-compose:*)",
+      "Bash(docker inspect:*)",
+      "Bash(curl http://localhost/api/test)",
+      "Bash(docker logs:*)"
     ],
     "deny": [],
     "ask": []

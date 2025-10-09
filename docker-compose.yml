@@ -1,7 +1,5 @@
-version: '3.8'
-
 services:
-#  postgres:
+  postgres:
     image: postgres:16
     container_name: google-calendar-todo-db
     env_file:
@@ -24,25 +22,25 @@ services:
     restart: unless-stopped
 
 # server
-backend:
-  build:
-    context: ./server
-    dockerfile: Dockerfile
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
     container_name: google-calendar-todo-backend
     restart: unless-stopped
     ports:
       - "3000:3000"
     environment:
-    node_ENV: development
-    PORT: 3000
-    DATABASE_URL: postgresql://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}
+      NODE_ENV: development
+      PORT: 3000
+      DATABASE_URL: postgresql://${DB_USER}:${DB_PASSWORD}@postgres:5432/${DB_NAME}
     volumes:
     - ./server/src:/app/src
     - ./server/node_modules:/app/node_modules
     depends_on:
-      db:
-        condition: services_healthy
-    network:
+      postgres:
+        condition: service_healthy
+    networks:
       - app-network
 
 # frontend

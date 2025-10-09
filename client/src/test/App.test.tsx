@@ -25,6 +25,6 @@ describe('App', () => {
     const loginButton = screen.getByRole('button', { name: 'googleでログイン' });
     fireEvent.click(loginButton);
 
-    expect(mockLocation.href).toBe('http://localhost:3000/auth');
+    expect(mockLocation.href).toBe('/auth');
   });
 });

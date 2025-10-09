@@ -27,7 +27,46 @@ services:
 backend:
   build:
     context: ./server
-    dockerfile: dockerfile
+    dockerfile: Dockerfile
+    container_name: google-calendar-todo-backend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+    node_ENV: development
+    PORT: 3000
+    DATABASE_URL: postgresql://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}
+    volumes:
+    - ./server/src:/app/src
+    - ./server/node_modules:/app/node_modules
+    depends_on:
+      db:
+        condition: services_healthy
+    network:
+      - app-network
+
+# frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: http://localhost:3000
+    container_name: my-project-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - app-network
 
 volumes:
   postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  app-network:
+    driver: bridge

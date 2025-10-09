@@ -3,7 +3,7 @@ import { Button, Typography, Container, Box } from '@mui/material'
 function App() {
 
   const loginHandle = () => {
-    window.location.href = 'http://localhost:3000/auth';
+    window.location.href = '/auth';
   }
   return (
     <Container style={{ textAlign: 'center' }} >

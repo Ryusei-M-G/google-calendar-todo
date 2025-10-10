@@ -8,15 +8,15 @@ import { useState, useEffect } from 'react';
 import dayjs, { Dayjs } from 'dayjs';
 
 interface TodoItem {
-  id: number;
+  id: string;
   summary: string;
-  startDate: string;
-  endDate: string;
+  start: string;
+  end: string;
 }
 
 interface InputFormProps {
-  onAddTodo: (summary: string, startDate: string, endDate: string) => void;
-  onUpdateTodo: (id: number, summary: string, startDate: string, endDate: string) => void;
+  onAddTodo: (summary: string, start: string, end: string) => void;
+  onUpdateTodo: (id: string, summary: string, start: string, end: string) => void;
   editingTodo: TodoItem | null;
   onCancelEdit: () => void;
 }
@@ -29,8 +29,8 @@ const InputForm = ({ onAddTodo, onUpdateTodo, editingTodo, onCancelEdit }: Input
   useEffect(() => {
     if (editingTodo) {
       setSummary(editingTodo.summary);
-      setStartDate(dayjs(editingTodo.startDate, 'YYYY-MM-DD HH:mm'));
-      setEndDate(dayjs(editingTodo.endDate, 'YYYY-MM-DD HH:mm'));
+      setStartDate(dayjs(editingTodo.start));
+      setEndDate(dayjs(editingTodo.end));
     } else {
       setSummary('');
       setStartDate(dayjs());

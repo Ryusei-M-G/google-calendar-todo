@@ -68,10 +68,10 @@ describe('InputForm', () => {
 
   it('shows update button and cancel button in edit mode', () => {
     const editingTodo = {
-      id: 1,
+      id: '1',
       summary: 'Test Todo',
-      startDate: '2025-10-25 09:00',
-      endDate: '2025-10-26 18:00',
+      start: '2025-10-25 09:00',
+      end: '2025-10-26 18:00',
     };
     render(<InputForm {...defaultProps} editingTodo={editingTodo} />);
 
@@ -81,10 +81,10 @@ describe('InputForm', () => {
 
   it('populates form with editing todo data', () => {
     const editingTodo = {
-      id: 1,
+      id: '1',
       summary: 'Test Todo',
-      startDate: '2025-10-25 09:00',
-      endDate: '2025-10-26 18:00',
+      start: '2025-10-25 09:00',
+      end: '2025-10-26 18:00',
     };
     render(<InputForm {...defaultProps} editingTodo={editingTodo} />);
 
@@ -95,10 +95,10 @@ describe('InputForm', () => {
   it('calls onUpdateTodo when form is submitted in edit mode', () => {
     const mockUpdateTodo = vi.fn();
     const editingTodo = {
-      id: 1,
+      id: '1',
       summary: 'Test Todo',
-      startDate: '2025-10-25 09:00',
-      endDate: '2025-10-26 18:00',
+      start: '2025-10-25 09:00',
+      end: '2025-10-26 18:00',
     };
     render(<InputForm {...defaultProps} editingTodo={editingTodo} onUpdateTodo={mockUpdateTodo} />);
 
@@ -108,16 +108,16 @@ describe('InputForm', () => {
     const submitButton = screen.getByRole('button', { name: '更新' });
     fireEvent.click(submitButton);
 
-    expect(mockUpdateTodo).toHaveBeenCalledWith(1, 'Updated Todo', expect.any(String), expect.any(String));
+    expect(mockUpdateTodo).toHaveBeenCalledWith('1', 'Updated Todo', expect.any(String), expect.any(String));
   });
 
   it('calls onCancelEdit when cancel button is clicked', () => {
     const mockCancelEdit = vi.fn();
     const editingTodo = {
-      id: 1,
+      id: '1',
       summary: 'Test Todo',
-      startDate: '2025-10-25 09:00',
-      endDate: '2025-10-26 18:00',
+      start: '2025-10-25 09:00',
+      end: '2025-10-26 18:00',
     };
     render(<InputForm {...defaultProps} editingTodo={editingTodo} onCancelEdit={mockCancelEdit} />);
 

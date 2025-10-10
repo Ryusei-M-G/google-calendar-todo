@@ -7,6 +7,7 @@ import callback from './callback';
 import { Request, Response } from 'express';
 import cors from 'cors'
 import { PgSessionStore } from './session-store';
+import getCalendarEvent from './getCalendarEvent';
 
 
 configDotenv();
@@ -44,9 +45,7 @@ app.use(session({
 
 app.get('/auth', google_oauth);
 app.get('/auth/google/callback', callback);
-app.get('/api/event', (req: Request, res: Response) => {
-  res.status(200).json({message:'ok'});
-})
+app.get('/api/event',getCalendarEvent)
 app.listen(port, '0.0.0.0', () => {
   console.log(`server is running on port:${port}`)
 })

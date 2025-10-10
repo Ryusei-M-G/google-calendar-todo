@@ -1,5 +1,4 @@
 -- 002_create_sessions_table.sql
--- セッション情報を保存するテーブル（connect-pg-simple用）
 
 CREATE TABLE IF NOT EXISTS session (
   sid VARCHAR NOT NULL COLLATE "default",

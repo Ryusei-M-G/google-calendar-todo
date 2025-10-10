@@ -4,8 +4,8 @@ import session from 'express-session';
 import { Pool } from 'pg';
 import google_oauth from './google_oauth';
 import callback from './callback';
-import { Request,Response } from 'express';
-import cors from'cors'
+import { Request, Response } from 'express';
+import cors from 'cors'
 import { PgSessionStore } from './session-store';
 
 
@@ -42,13 +42,11 @@ app.use(session({
   }
 }))
 
-app.get('/auth',google_oauth);
-app.get('/auth/google/callback',callback);
-app.get('/api/test', (req:Request,res:Response) => {
-  console.log('test')
-  res.json({message:'test'})
-
+app.get('/auth', google_oauth);
+app.get('/auth/google/callback', callback);
+app.get('/api/event', (req: Request, res: Response) => {
+  res.status(200).json({message:'ok'});
 })
-app.listen(port, '0.0.0.0', ()=>{
+app.listen(port, '0.0.0.0', () => {
   console.log(`server is running on port:${port}`)
 })

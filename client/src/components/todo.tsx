@@ -1,4 +1,5 @@
-import { useState, Fragment } from 'react';
+import { useState,useEffect ,Fragment} from 'react';
+import axios from 'axios'
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Divider from '@mui/material/Divider';
@@ -62,6 +63,14 @@ export default function Todo() {
     ));
     setEditingTodo(null);
   }
+  const getCalendarEvent = async() => {
+    const res = await axios.get('localhost/api/event');
+    console.log(res);
+  }
+
+  useEffect(()=>{
+    getCalendarEvent();
+  },[])
 
   return (
     <div style={{textAlign:'center'}}>

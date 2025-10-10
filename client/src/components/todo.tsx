@@ -49,7 +49,7 @@ export default function Todo() {
     setEditingTodo(null);
   }
   const getCalendarEvent = async () => {
-    const res = await axios.get('http://localhost/api/event');
+    const res = await axios.get('/api/event', { withCredentials: true })
     console.log(res);
     console.log(res.data?.events);
     setTodoData(res.data.events);

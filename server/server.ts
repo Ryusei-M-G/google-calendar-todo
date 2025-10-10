@@ -1,10 +1,12 @@
 import express from 'express'
 import { configDotenv } from 'dotenv';
 import session from 'express-session';
+import { Pool } from 'pg';
 import google_oauth from './google_oauth';
 import callback from './callback';
 import { Request,Response } from 'express';
 import cors from'cors'
+import { PgSessionStore } from './session-store';
 
 
 configDotenv();
@@ -12,12 +14,22 @@ configDotenv();
 const app = express();
 const port = parseInt(process.env.PORT || '3000');
 
+// PostgreSQL接続プール
+const pool = new Pool({
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_NAME,
+  password: process.env.DB_PASSWORD,
+  port: Number(process.env.DB_PORT),
+});
+
 app.use(cors({
   origin: process.env.CORS_ORIGIN || 'http://localhost',
   credentials: true
 }))
 
 app.use(session({
+  store: new PgSessionStore(pool),
   secret: process.env.SESSION_SECRET || 'your-secret-key',
   resave: false,
   saveUninitialized: false,

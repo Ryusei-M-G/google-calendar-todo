@@ -91,7 +91,7 @@ const callback = async (req: Request, res: Response): Promise<void> => {
       }
 
       // フロントエンドにリダイレクト（cookieは自動的に送信される）
-      const frontendUrl = process.env.FRONTEND_URL || 'http://localhost';
+      const frontendUrl = process.env.FRONTEND_URL || 'http://localhost/todo';
       res.redirect(frontendUrl);
     });
   } catch (error) {

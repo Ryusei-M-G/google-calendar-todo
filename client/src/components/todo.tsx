@@ -8,6 +8,8 @@ import Typography from '@mui/material/Typography';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 
 import InputForm from './form';
 
@@ -22,6 +24,7 @@ interface TodoItem {
 export default function Todo() {
   const [todoData, setTodoData] = useState<TodoItem[]>([]);
   const [editingTodo, setEditingTodo] = useState<TodoItem | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const deleteHandle = (id: string) => {
     setTodoData(todoData.filter((item) => item.id !== id));
@@ -49,10 +52,16 @@ export default function Todo() {
     setEditingTodo(null);
   }
   const getCalendarEvent = async () => {
-    const res = await axios.get('/api/event', { withCredentials: true })
-    console.log(res);
-    console.log(res.data?.events);
-    setTodoData(res.data.events);
+    try {
+      setIsLoading(true);
+      const res = await axios.get('/api/event', { withCredentials: true })
+      setTodoData(res.data.events)
+    }catch(err){
+      console.log(err);
+    }finally{
+      setIsLoading(false);
+    }
+;
   }
 
   useEffect(() => {
@@ -67,39 +76,45 @@ export default function Todo() {
         editingTodo={editingTodo}
         onCancelEdit={() => setEditingTodo(null)}
       />
-      <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper', margin: '0 auto' }}>
-        {todoData.map((e) => {
-          return (
-            <Fragment key={e.id}>
-              <ListItem alignItems="flex-start">
-                <ListItemText
-                  primary={e.summary}
-                  secondary={
-                    <Fragment>
-                      <Typography
-                        component="span"
-                        variant="body2"
-                        sx={{ color: 'text.primary', display: 'inline' }}
-                      >
-                        {e.start}
-                        {' - '}
-                        {e.end}
-                      </Typography>
-                    </Fragment>
-                  }
-                />
-                <IconButton aria-label="edit" onClick={() => editHandle(e)}>
-                  <EditIcon />
-                </IconButton>
-                <IconButton aria-label="delete" onClick={() => deleteHandle(e.id)}>
-                  <DeleteIcon />
-                </IconButton>
-              </ListItem>
-              <Divider variant="fullWidth" component="li" />
-            </Fragment>
-          )
-        })}
-      </List>
+      {isLoading ? (
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+          <CircularProgress />
+        </Box>
+      ) : (
+        <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper', margin: '0 auto' }}>
+          {todoData.map((e) => {
+            return (
+              <Fragment key={e.id}>
+                <ListItem alignItems="flex-start">
+                  <ListItemText
+                    primary={e.summary}
+                    secondary={
+                      <Fragment>
+                        <Typography
+                          component="span"
+                          variant="body2"
+                          sx={{ color: 'text.primary', display: 'inline' }}
+                        >
+                          {e.start}
+                          {' - '}
+                          {e.end}
+                        </Typography>
+                      </Fragment>
+                    }
+                  />
+                  <IconButton aria-label="edit" onClick={() => editHandle(e)}>
+                    <EditIcon />
+                  </IconButton>
+                  <IconButton aria-label="delete" onClick={() => deleteHandle(e.id)}>
+                    <DeleteIcon />
+                  </IconButton>
+                </ListItem>
+                <Divider variant="fullWidth" component="li" />
+              </Fragment>
+            )
+          })}
+        </List>
+      )}
     </div>
   );
 }

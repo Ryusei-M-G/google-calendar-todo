@@ -82,13 +82,17 @@ const callback = async (req: Request, res: Response): Promise<void> => {
     req.session.email = user.email;
     req.session.name = user.name;
 
-    res.json({
-      message: 'Authentication successful',
-      user: {
-        id: user.id,
-        email: user.email,
-        name: user.name,
-      },
+    // セッションを保存してからリダイレクト
+    req.session.save((err) => {
+      if (err) {
+        console.error('Session save error:', err);
+        res.status(500).send('Session save failed');
+        return;
+      }
+
+      // フロントエンドにリダイレクト（cookieは自動的に送信される）
+      const frontendUrl = process.env.FRONTEND_URL || 'http://localhost';
+      res.redirect(frontendUrl);
     });
   } catch (error) {
     console.error('Authentication error:', error);

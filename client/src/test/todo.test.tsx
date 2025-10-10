@@ -15,7 +15,7 @@ describe('Todo', () => {
     render(<Todo />);
 
     await waitFor(() => {
-      expect(axios.get).toHaveBeenCalledWith('http://localhost/api/event');
+      expect(axios.get).toHaveBeenCalledWith('/api/event', { withCredentials: true });
     });
   });
 

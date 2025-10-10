@@ -1,13 +1,13 @@
 import express from 'express'
 import { configDotenv } from 'dotenv';
 import session from 'express-session';
-import { Pool } from 'pg';
 import google_oauth from './google_oauth';
 import callback from './callback';
 import { Request, Response } from 'express';
 import cors from 'cors'
 import { PgSessionStore } from './session-store';
 import getCalendarEvent from './getCalendarEvent';
+import { getPool } from './db';
 
 
 configDotenv();
@@ -15,14 +15,8 @@ configDotenv();
 const app = express();
 const port = parseInt(process.env.PORT || '3000');
 
-// PostgreSQL接続プール
-const pool = new Pool({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DB_NAME,
-  password: process.env.DB_PASSWORD,
-  port: Number(process.env.DB_PORT),
-});
+// PostgreSQL 接続プール（単一化）
+const pool = getPool();
 
 app.use(cors({
   origin: process.env.CORS_ORIGIN || 'http://localhost',
@@ -35,7 +29,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: false, // localhostの場合はfalse
+    secure: false,
     httpOnly: true,
     sameSite: 'lax',
     maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
@@ -45,7 +39,8 @@ app.use(session({
 
 app.get('/auth', google_oauth);
 app.get('/auth/google/callback', callback);
-app.get('/api/event',getCalendarEvent)
+app.get('/api/event', getCalendarEvent)
 app.listen(port, '0.0.0.0', () => {
   console.log(`server is running on port:${port}`)
 })
+

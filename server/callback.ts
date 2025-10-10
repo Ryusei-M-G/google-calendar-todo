@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { Pool } from 'pg';
+import { getPool } from './db';
 import { google } from 'googleapis';
 
 declare module 'express-session' {
@@ -10,20 +10,7 @@ declare module 'express-session' {
   }
 }
 
-let pool: Pool;
-
-const getPool = () => {
-  if (!pool) {
-    pool = new Pool({
-      user: process.env.DB_USER,
-      host: process.env.DB_HOST,
-      database: process.env.DB_NAME,
-      password: process.env.DB_PASSWORD,
-      port: Number(process.env.DB_PORT),
-    });
-  }
-  return pool;
-};
+// DB プールは共通モジュールから取得
 
 const callback = async (req: Request, res: Response): Promise<void> => {
   const code = req.query.code as string;

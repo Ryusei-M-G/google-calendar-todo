@@ -1,5 +1,6 @@
 import express from 'express'
 import { configDotenv } from 'dotenv';
+import session from 'express-session';
 import google_oauth from './google_oauth';
 import callback from './callback';
 import { Request,Response } from 'express';
@@ -14,6 +15,17 @@ const port = parseInt(process.env.PORT || '3000');
 app.use(cors({
   origin: process.env.CORS_ORIGIN || 'http://localhost',
   credentials: true
+}))
+
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'your-secret-key',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: process.env.NODE_ENV === 'production',
+    httpOnly: true,
+    maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days
+  }
 }))
 
 app.get('/auth',google_oauth);

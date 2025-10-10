@@ -2,6 +2,14 @@ import { Request, Response } from 'express';
 import { Pool } from 'pg';
 import { google } from 'googleapis';
 
+declare module 'express-session' {
+  interface SessionData {
+    userId?: number;
+    email?: string;
+    name?: string;
+  }
+}
+
 let pool: Pool;
 
 const getPool = () => {
@@ -68,6 +76,11 @@ const callback = async (req: Request, res: Response): Promise<void> => {
 
     const result = await getPool().query(query, values);
     const user = result.rows[0];
+
+    // セッションにユーザー情報を保存
+    req.session.userId = user.id;
+    req.session.email = user.email;
+    req.session.name = user.name;
 
     res.json({
       message: 'Authentication successful',
